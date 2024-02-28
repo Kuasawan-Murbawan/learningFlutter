@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   // This is the entry point to the app (run this first)
@@ -22,20 +23,35 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String textMessage = ""; // create a variable to store the text
+
+  void changeText(String text) {
+    setState(() {
+      textMessage = text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Hello from Appbar!")),
-      body: TextInputWidget(),
+      body: Column(
+        children: <Widget>[TextInputWidget(changeText), Text(this.textMessage)],
+      ),
     );
   }
 }
 
 class TextInputWidget extends StatefulWidget {
-  const TextInputWidget({super.key});
+  final Function(String) callback; // create a callback function
+
+  TextInputWidget(this.callback);
 
   @override
   State<TextInputWidget> createState() => _TextInputWidgetState();
@@ -44,7 +60,6 @@ class TextInputWidget extends StatefulWidget {
 class _TextInputWidgetState extends State<TextInputWidget> {
   final controller =
       TextEditingController(); // use the controller to get the text
-  String textMessage = ""; // create a variable to store the text
 
   @override
   void dispose() {
@@ -53,29 +68,23 @@ class _TextInputWidgetState extends State<TextInputWidget> {
     controller.dispose();
   }
 
-  void changeText(texthere) {
-    setState(() {
-      if (texthere == 'husay') {
-        controller.clear();
-        this.textMessage = "You are not allowed to type this word";
-      }
-      // update the UI with the new value
-      this.textMessage =
-          texthere; // change the textMessage to the text inside the input
-    });
+  void click() {
+    widget.callback(controller.text);
+    controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      TextField(
-        controller: controller,
-        decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.message), labelText: "Type a message"),
-        onChanged: (text) => changeText(
-            text), // pass the text inside this inputtext to a function
-      ),
-      Text(textMessage) // display the textMessage
-    ]);
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          prefixIcon: Icon(Icons.message),
+          labelText: "Type a message",
+          suffixIcon: IconButton(
+            icon: Icon(Icons.send),
+            splashColor: Colors.deepOrange,
+            onPressed: click,
+          )),
+    );
   }
 }
