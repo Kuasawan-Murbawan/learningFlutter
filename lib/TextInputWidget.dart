@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class TextInputWidget extends StatefulWidget {
   final Function(String) callback; // create a callback function
 
-  TextInputWidget(this.callback);
+  TextInputWidget(this.callback,
+      {required Null Function(dynamic text) onChanged});
 
   @override
   State<TextInputWidget> createState() => _TextInputWidgetState();

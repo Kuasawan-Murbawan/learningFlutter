@@ -16,3 +16,20 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+   def keystoreProperties = new Properties()
+   def keystorePropertiesFile = rootProject.file('key.properties')
+   if (keystorePropertiesFile.exists()) {
+       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+   }
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file("C:\dell\upload-keystore.jks") // Replace with actual path
+            storePassword 'abcd1234'
+            keyAlias 'upload'
+            keyPassword 'abcd1234'
+        }
+    }
+}

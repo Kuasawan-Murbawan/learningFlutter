@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:price_comparison/MyHomePage.dart';
-import 'package:price_comparison/about.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -26,15 +25,39 @@ class _BodyState extends State<Body> {
   TextEditingController nameController = TextEditingController();
 
   Future<void> click() async {
-    name = nameController.text;
+    if (nameController.text.isEmpty) {
+      Get.dialog(AlertDialog(
+        title: const Text('Invalid Input'),
+        content: const Text('Please enter your name!'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      ));
+    } else {
+      name = nameController.text;
+      showGreetingsToast();
+      Get.toNamed('/home', arguments: name);
+    }
+  }
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MyHomePage(name)));
+  void showGreetingsToast() {
+    Get.snackbar(
+      'Login Succesful',
+      "Welcome $name !",
+      isDismissible: true,
+      duration: const Duration(seconds: 3),
+      snackPosition: SnackPosition.BOTTOM,
+      barBlur: 20.0,
+      backgroundColor: Colors.greenAccent,
+    );
   }
 
   void aboutBtn() {
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => About())); // This is the old way of navigating to another page
-    //Get.to(const About()); // This is the new way of navigating to another page
     name = nameController.text;
     Get.toNamed('/about', arguments: name);
   }

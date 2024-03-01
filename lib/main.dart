@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:price_comparison/about.dart';
 import 'package:price_comparison/login.dart';
+import 'package:price_comparison/routes.dart';
 import 'package:price_comparison/unknownRoute.dart';
 
 void main() {
@@ -10,7 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -18,17 +18,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Husyairi App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepOrange),
       ),
       unknownRoute:
           GetPage(name: '/notfound', page: () => const UnknownRoutePage()),
-      getPages: [
-        GetPage(
-            name: '/about',
-            page: () => const About(),
-            transition: Transition.downToUp),
-      ],
+      getPages: appRoutes,
       home: LoginPage(),
     );
   }

@@ -39,6 +39,8 @@ dependencies:
   url_launcher: ^6.1.2
   nb_utils: ^6.1.2
   get: ^4.6.6
+  camera: ^0.10.5+9
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:
