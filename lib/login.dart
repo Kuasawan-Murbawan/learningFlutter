@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:price_comparison/MyHomePage.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:price_comparison/about.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -19,33 +21,22 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  late String name;
-  late Position userPosition;
+  String name = "";
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   Future<void> click() async {
-    name = controller.text;
+    name = nameController.text;
 
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(this.name, this.userPosition)));
+        context, MaterialPageRoute(builder: (context) => MyHomePage(name)));
   }
 
-  void getLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    userPosition = position;
-    print(position);
+  void aboutBtn() {
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => About())); // This is the old way of navigating to another page
+    //Get.to(const About()); // This is the new way of navigating to another page
+    name = nameController.text;
+    Get.toNamed('/about', arguments: name);
   }
 
   @override
@@ -59,7 +50,7 @@ class _BodyState extends State<Body> {
             children: <Widget>[
               Expanded(
                 child: TextField(
-                  controller: controller,
+                  controller: nameController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person),
                     labelText: "Enter your name",
@@ -74,10 +65,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
               ),
-              SizedBox(
-                  width: 10), // Add some space between TextField and Button
-              ElevatedButton(
-                  onPressed: getLocation, child: const Text('Get Location'))
+              ElevatedButton(onPressed: aboutBtn, child: const Text('About')),
             ],
           ),
         ),
